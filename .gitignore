@@ -8,3 +8,4 @@ Cargo.lock
 *.iml
 .vscode
 /node_modules/
+/res
