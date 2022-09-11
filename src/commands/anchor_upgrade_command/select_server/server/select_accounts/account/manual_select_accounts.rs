@@ -6,7 +6,6 @@ use crate::commands::anchor_upgrade_command::select_server::SelectServerContext;
 use crate::commands::anchor_upgrade_command::select_server::server::ServerContext;
 use crate::near::types::{NearAccountWithKey, NearEnv};
 use crate::near::util::{get_accounts_from_path, get_default_near_account_dir_path};
-use crate::types::account_id::AccountId;
 
 #[derive(Debug, Clone, interactive_clap_derive::InteractiveClap)]
 #[interactive_clap(context = super::super::super::ServerContext)]
@@ -22,13 +21,6 @@ impl ManualSelectAccounts {
     pub fn input_account_ids(
         _context: &ServerContext
     )-> color_eyre::eyre::Result<String> {
-        //
-        // loop {
-        //     let account_raw: String = Input::new()
-        //         .with_prompt("Enter account list,eg: a.testnet,b.testnet,c.testnet:")
-        //         .interact_text()?;
-        //     account_raw.mat
-        // }
         Ok(Input::new()
             .with_prompt("Enter account list split by ','. eg: a.testnet,b.testnet,c.testnet")
             .interact_text()?)

@@ -7,7 +7,6 @@ use crate::common::{CliResult, try_external_subcommand_execution};
 
 mod commands;
 mod consts;
-mod types;
 mod near;
 mod oct;
 mod util;
