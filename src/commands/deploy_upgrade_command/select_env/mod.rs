@@ -1,18 +1,15 @@
-use crate::near::types::NearEnv;
 use strum::{EnumDiscriminants, EnumIter, EnumMessage};
+use crate::near::types::NearEnv;
 
-pub mod select_rpc;
-
+mod select_rpc;
 
 #[derive(Debug, Clone, EnumDiscriminants, interactive_clap_derive::InteractiveClap)]
 #[strum_discriminants(derive(EnumMessage, EnumIter))]
 #[interactive_clap(context = ())]
-///Select NEAR environment
+///Select NEAR protocol environment
 pub enum SelectEnv {
-    /// Provide data for the server https://rpc.testnet.near.org
     #[strum_discriminants(strum(message = "Testnet"))]
     Testnet(self::env::Env),
-    /// Provide data for the server https://rpc.mainnet.near.org
     #[strum_discriminants(strum(message = "Mainnet"))]
     Mainnet(self::env::Env),
 }
@@ -37,7 +34,7 @@ mod env {
     }
 
     impl Env {
-        pub async fn process(self, connection_config: NearEnv ) -> crate::CliResult {
+        pub async fn process(self, connection_config: NearEnv) -> crate::CliResult {
             self.select_rpc.process(connection_config).await
         }
     }

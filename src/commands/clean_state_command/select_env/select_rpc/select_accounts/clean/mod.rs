@@ -29,7 +29,7 @@ impl CleanState {
     ) -> CliResult {
         if self.confirm.eq("y") || self.confirm.eq("Y") {
             for account in account_list {
-                println!("---Start clean {} states", account.account_id);
+                println!("\n---Start clean {} states", account.account_id);
 
                 let clean_contract = CleanStateContract {
                     account_id: account.account_id.clone(),
@@ -44,7 +44,12 @@ impl CleanState {
                     color_eyre::Report::msg(format!("Failed to clean account({}) states, error: {}", account.account_id, error))
                 })?;
 
-                println!("---End clean {} states", account.account_id);
+                let result = client.view_state(account.account_id.clone(), None, None).await.map_err(|error| {
+                    color_eyre::Report::msg(format!("Failed to view account({}) states, error: {}", account.account_id, error))
+                })?;
+                println!("Show account state after clean up: {:?}", result);
+
+                println!("---End clean {} states\n", account.account_id);
             }
         } else {
             println!("Cancel clean state!");
