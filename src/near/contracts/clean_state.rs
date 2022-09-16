@@ -30,7 +30,7 @@ impl<'s> CleanStateContract<'s> {
         let result = self.client.view_state(signer.account_id.clone(), None, None).await?;
         let keys = result.values.iter().map(|e| e.key.clone()).collect_vec();
 
-        println!("Read account state before clean up: {:?}", result);
+        println!("Read account state keys before clean up: \n---\n {:?} \n---\n", keys);
 
         self.client.call(
             signer,

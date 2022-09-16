@@ -9,10 +9,8 @@ pub mod select_rpc;
 #[interactive_clap(context = ())]
 ///Select NEAR environment
 pub enum SelectEnv {
-    /// Provide data for the server https://rpc.testnet.near.org
     #[strum_discriminants(strum(message = "Testnet"))]
     Testnet(self::env::Env),
-    /// Provide data for the server https://rpc.mainnet.near.org
     #[strum_discriminants(strum(message = "Mainnet"))]
     Mainnet(self::env::Env),
 }

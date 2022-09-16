@@ -7,24 +7,42 @@ You can run oct-cli in command and finish some functions interactively, eg:
 
 ![](./docs/example.gif)
 
+After the interactive program is executed, the command line parameters will be printed, and next time you can skip the interaction and use the command line directly.
 
-## Anchor upgrade
+## Deploy or Upgrade
 
 ```shell
 USAGE:
-    oct-cli anchor-upgrade [SUBCOMMAND]
+    oct-cli deploy-or-upgrade [SUBCOMMAND]
 
 FLAGS:
     -h, --help    Prints help information
 
 SUBCOMMANDS:
-    mainnet    Provide data for the server https://rpc.mainnet.near.org
-    testnet    Provide data for the server https://rpc.testnet.near.org
-
+    mainnet    
+    testnet 
 ```
 **example**
 1. How to upgrade anchor contract from v2.1.0 to v2.2.0 in account: anchorxsb.testnet:
 ```shell
-./oct-cli anchor-upgrade testnet select-private manual-select-accounts --account-ids anchorxsb.testnet upgrade /Users/xushenbao/project/blockchian/octopus/oct-cli-rs/res/appchain_anchor_v2.0.0.wasm new '{"appchain_id": "appchain_id", "appchain_registry": "appchain_registry", "oct_token": "oct_token"}'
+oct-cli deploy-or-upgrade testnet select-rpc block-pi select-accounts manual-select-accounts --account-ids anchorxsb.testnet upgrade /Users/xushenbao/project/blockchian/octopus/oct-cli-rs/res/appchain_anchor_v2.1.0.wasm migrate_state {}
 ```
 
+## Clean up states
+
+```shell
+USAGE:
+    oct-cli clean-state [SUBCOMMAND]
+
+FLAGS:
+    -h, --help    Prints help information
+
+SUBCOMMANDS:
+    mainnet    
+    testnet 
+```
+**example**
+1. Clean up `anchorxsb.testnet`:
+```shell
+oct-cli clean-state testnet select-rpc block-pi select-accounts manual-select-accounts --account-ids anchorxsb.testnet clean-state y
+```
