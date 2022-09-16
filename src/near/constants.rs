@@ -3,6 +3,18 @@ pub const ONE_TERA_GAS: u64 = 10u64.pow(12);
 pub const ONE_GIGA_GAS: u64 = 10u64.pow(9);
 pub const ONE_NEAR: u128 = 10u128.pow(24);
 
+
+// near official rpc
+
+pub const NEAR_OFFICIAL_MAINNET_RPC_URL: &str = "https://rpc.mainnet.near.org";
+pub const NEAR_OFFICIAL_TESTNET_RPC_URL: &str = "https://rpc.testnet.near.org";
+
+// block pi rpc
+
+pub const BLOCKPI_MAINNET_RPC_URL: &str = "https://public-rpc.blockpi.io/http/near";
+pub const BLOCKPI_TESTNET_RPC_URL: &str = "https://public-rpc.blockpi.io/http/near-testnet";
+
+
 pub const TESTNET_API_SERVER_URL: &str = "https://public-rpc.blockpi.io/http/near-testnet";
 pub const TESTNET_ARCHIVAL_API_SERVER_URL: &str = "https://public-rpc.blockpi.io/http/near-testnet";
 pub const MAINNET_API_SERVER_URL: &str = "https://rpc.mainnet.near.org";

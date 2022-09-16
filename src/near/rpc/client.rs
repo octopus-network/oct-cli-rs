@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::fmt::Debug;
 use std::ops::Mul;
 use std::time::Duration;
@@ -25,7 +24,6 @@ use tokio_retry::strategy::{ExponentialBackoff, jitter};
 
 use crate::near::constants::ONE_TERA_GAS;
 use crate::near::rpc::result::ViewResultDetails;
-use crate::near::rpc::tool;
 
 pub(crate) const DEFAULT_CALL_FN_GAS: Gas = 10_000_000_000_000;
 pub(crate) const DEFAULT_CALL_DEPOSIT: Balance = 0;
@@ -35,8 +33,8 @@ const ERR_INVALID_VARIANT: &str =
 /// A client that wraps around [`JsonRpcClient`], and provides more capabilities such
 /// as retry w/ exponential backoff and utility functions for sending transactions.
 pub struct Client {
-    rpc_addr: String,
-    rpc_client: JsonRpcClient,
+    pub rpc_addr: String,
+    pub rpc_client: JsonRpcClient,
 }
 
 impl Client {
@@ -180,7 +178,7 @@ impl Client {
         contract_id: AccountId,
         prefix: Option<&[u8]>,
         block_id: Option<BlockId>,
-    ) -> anyhow::Result<HashMap<Vec<u8>, Vec<u8>>> {
+    ) -> anyhow::Result<near_primitives::views::ViewStateResult> {
         let block_reference = block_id
             .map(Into::into)
             .unwrap_or_else(|| Finality::None.into());
@@ -196,7 +194,7 @@ impl Client {
             .await?;
 
         match query_resp.kind {
-            QueryResponseKind::ViewState(state) => tool::into_state_map(&state.values),
+            QueryResponseKind::ViewState(state) => anyhow::Ok(state),
             _ => anyhow::bail!(ERR_INVALID_VARIANT),
         }
     }

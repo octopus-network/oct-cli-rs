@@ -6,7 +6,6 @@ use shell_words;
 use crate::common::{CliResult, try_external_subcommand_execution};
 
 mod commands;
-mod consts;
 mod near;
 mod oct;
 mod util;

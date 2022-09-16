@@ -11,6 +11,3 @@ pub(crate) fn into_state_map(
 
     state_items.iter().map(decode).collect()
 }
-
-
-

@@ -2,9 +2,9 @@ use std::io;
 use std::path::Path;
 use near_crypto::InMemorySigner;
 
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-use crate::near::constants::{ONE_NEAR, ONE_TERA_GAS};
+use crate::near::constants::{BLOCKPI_MAINNET_RPC_URL, BLOCKPI_TESTNET_RPC_URL, DIR_NAME_MAINNET, DIR_NAME_TESTNET, MAINNET_ARCHIVAL_API_SERVER_URL, MAINNET_TRANSACTION_URL, MAINNET_WALLET_URL, ONE_NEAR, TESTNET_ARCHIVAL_API_SERVER_URL, TESTNET_TRANSACTION_URL, TESTNET_WALLET_URL};
 use crate::near::rpc::client::Client;
 
 #[derive(Debug, Deserialize)]
@@ -35,16 +35,14 @@ impl From<NearAccountWithKey> for InMemorySigner {
 pub enum NearEnv {
     Testnet,
     Mainnet,
-    Betanet,
 }
 
 impl NearEnv {
 
     pub fn rpc_url(&self) -> url::Url {
         match self {
-            Self::Testnet => crate::consts::TESTNET_API_SERVER_URL.parse().unwrap(),
-            Self::Mainnet => crate::consts::MAINNET_API_SERVER_URL.parse().unwrap(),
-            Self::Betanet => crate::consts::BETANET_API_SERVER_URL.parse().unwrap(),
+            Self::Testnet => BLOCKPI_TESTNET_RPC_URL.parse().unwrap(),
+            Self::Mainnet => BLOCKPI_MAINNET_RPC_URL.parse().unwrap(),
         }
     }
 
@@ -54,13 +52,10 @@ impl NearEnv {
 
     pub fn archival_rpc_url(&self) -> url::Url {
         match self {
-            Self::Testnet => crate::consts::TESTNET_ARCHIVAL_API_SERVER_URL
+            Self::Testnet => TESTNET_ARCHIVAL_API_SERVER_URL
                 .parse()
                 .unwrap(),
-            Self::Mainnet => crate::consts::MAINNET_ARCHIVAL_API_SERVER_URL
-                .parse()
-                .unwrap(),
-            Self::Betanet => crate::consts::BETANET_ARCHIVAL_API_SERVER_URL
+            Self::Mainnet => MAINNET_ARCHIVAL_API_SERVER_URL
                 .parse()
                 .unwrap(),
         }
@@ -68,25 +63,22 @@ impl NearEnv {
 
     pub fn wallet_url(&self) -> url::Url {
         match self {
-            Self::Testnet => crate::consts::TESTNET_WALLET_URL.parse().unwrap(),
-            Self::Mainnet => crate::consts::MAINNET_WALLET_URL.parse().unwrap(),
-            Self::Betanet => crate::consts::BETANET_WALLET_URL.parse().unwrap(),
+            Self::Testnet => TESTNET_WALLET_URL.parse().unwrap(),
+            Self::Mainnet => MAINNET_WALLET_URL.parse().unwrap(),
         }
     }
 
     pub fn transaction_explorer(&self) -> url::Url {
         match self {
-            Self::Testnet => crate::consts::TESTNET_TRANSACTION_URL.parse().unwrap(),
-            Self::Mainnet => crate::consts::MAINNET_TRANSACTION_URL.parse().unwrap(),
-            Self::Betanet => crate::consts::BETANET_TRANSACTION_URL.parse().unwrap(),
+            Self::Testnet => TESTNET_TRANSACTION_URL.parse().unwrap(),
+            Self::Mainnet => MAINNET_TRANSACTION_URL.parse().unwrap(),
         }
     }
 
     pub fn account_dir_name(&self) -> &str {
         match self {
-            Self::Testnet => crate::consts::DIR_NAME_TESTNET,
-            Self::Mainnet => crate::consts::DIR_NAME_MAINNET,
-            Self::Betanet => crate::consts::DIR_NAME_BETANET,
+            Self::Testnet => DIR_NAME_TESTNET,
+            Self::Mainnet => DIR_NAME_MAINNET,
         }
     }
 }
