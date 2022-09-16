@@ -1,6 +1,5 @@
 use std::fs;
 use std::path::{Path, PathBuf};
-use near_crypto::InMemorySigner;
 use crate::near::types::{NearEnv, NearAccountWithKey, NearBalance};
 
 pub fn get_default_near_account_dir_path(connection_config: &NearEnv) -> PathBuf {

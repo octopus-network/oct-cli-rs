@@ -1,14 +1,14 @@
-pub mod select_server;
+pub mod select_env;
 
 #[derive(Debug, Clone, interactive_clap_derive::InteractiveClap)]
 #[interactive_clap(context = ())]
-pub struct NetworkArgs {
+pub struct CleanStateCommand {
     #[interactive_clap(subcommand)]
-    selected_server: self::select_server::SelectServer,
+    select_env: self::select_env::SelectEnv,
 }
 
-impl NetworkArgs {
+impl CleanStateCommand {
     pub async fn process(self) -> crate::CliResult {
-        self.selected_server.process().await
+        self.select_env.process().await
     }
 }

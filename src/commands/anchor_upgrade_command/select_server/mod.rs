@@ -1,7 +1,7 @@
 use strum::{EnumDiscriminants, EnumIter, EnumMessage};
 use crate::near::types::{NearEnv};
 
-mod server;
+pub(crate) mod server;
 
 #[derive(Debug, Clone, EnumDiscriminants, interactive_clap_derive::InteractiveClap)]
 #[strum_discriminants(derive(EnumMessage, EnumIter))]
@@ -15,12 +15,6 @@ pub enum SelectServer {
     /// Provide data for the server https://rpc.mainnet.near.org
     #[strum_discriminants(strum(message = "Mainnet"))]
     Mainnet(self::server::Server),
-    // /// Provide data for the server https://rpc.betanet.near.org
-    // #[strum_discriminants(strum(message = "Betanet"))]
-    // Betanet(self::server::Server),
-    // /// Provide data for a manually specified server
-    // #[strum_discriminants(strum(message = "Custom"))]
-    // Custom(self::server::CustomServer),
 }
 
 impl SelectServer {

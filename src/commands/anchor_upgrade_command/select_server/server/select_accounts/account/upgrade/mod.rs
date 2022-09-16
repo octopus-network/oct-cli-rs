@@ -1,6 +1,5 @@
 use std::path::Path;
 use dialoguer::Input;
-use near_crypto::Signer;
 use crate::CliResult;
 use crate::commands::anchor_upgrade_command::select_server::server::ServerContext;
 use crate::near::types::{NearEnv};
