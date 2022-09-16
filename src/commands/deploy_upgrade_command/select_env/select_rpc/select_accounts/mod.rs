@@ -14,7 +14,6 @@ pub mod upgrade;
 pub enum SelectAccounts {
     #[strum_discriminants(strum(message = "Input accounts(eg: a.testnet,b.testnet,c.testnet),make sure you have been login these accounts in this system"))]
     ManualSelectAccounts(self::manual_select_accounts::ManualSelectAccounts),
-    /// Provide data for the server https://rpc.mainnet.near.org
     #[strum_discriminants(strum(message = "Select all accounts located in ~/.near-credentials"))]
     DefaultDirectory(self::default_directory::DefaultDirectory),
     #[strum_discriminants(strum(message = "Select all accounts located in custom directory."))]
