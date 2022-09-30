@@ -19,7 +19,7 @@ impl<'s> CleanStateContract<'s> {
         &self,
         signer: &InMemorySigner,
     ) ->anyhow::Result<FinalExecutionOutcomeView>{
-        self.client.deploy(signer, STATE_CLEANUP_WASM.as_ref().into()).await
+        self.client.deploy(signer, <[u8] as AsRef<[u8]>>::as_ref(STATE_CLEANUP_WASM).into()).await
     }
 
     pub async fn clean_up_all(
