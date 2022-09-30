@@ -2,12 +2,12 @@ use std::io;
 use std::path::Path;
 use near_crypto::InMemorySigner;
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::near::constants::{BLOCKPI_MAINNET_RPC_URL, BLOCKPI_TESTNET_RPC_URL, DIR_NAME_MAINNET, DIR_NAME_TESTNET, MAINNET_ARCHIVAL_API_SERVER_URL, MAINNET_TRANSACTION_URL, MAINNET_WALLET_URL, ONE_NEAR, TESTNET_ARCHIVAL_API_SERVER_URL, TESTNET_TRANSACTION_URL, TESTNET_WALLET_URL};
 use crate::near::rpc::client::Client;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct NearAccountWithKey {
     pub account_id: near_primitives::types::AccountId,
     pub public_key: near_crypto::PublicKey,

@@ -58,17 +58,12 @@ impl Upgrade {
                      self.wasm_path,
                      self.migrate_method_name,
                      self.args);
-            let outcome = AnchorContract {
-                account_id: signer.account_id.clone(),
-                client: &client
-            }.deploy_and_init(
-                &signer,
-                code.clone(),
-                self.migrate_method_name.clone(),
-                self.args.clone().into_bytes()
-            ).await.map_err(|err|
-                color_eyre::Report::msg(format!("Failed to deploy anchor with {}, error: {}", signer.account_id, err))
-            )?;
+            let outcome = client.deploy_and_init(&signer, code.clone(), self.migrate_method_name.clone(), self.args.clone().into_bytes())
+                .await
+                .map_err(
+                    |err|
+                        color_eyre::Report::msg(format!("Failed to deploy anchor with {}, error: {}", signer.account_id, err))
+                )?;
             print_transaction_status(outcome, connection_config.clone());
             println!("---End {} deploy\n", signer.account_id);
         }

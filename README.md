@@ -46,3 +46,29 @@ SUBCOMMANDS:
 ```shell
 oct-cli clean-state testnet select-rpc block-pi select-accounts manual-select-accounts --account-ids anchorxsb.testnet clean-state y
 ```
+
+## Check 
+
+### Usage
+
+```shell
+oct-cli-check-reward 
+
+USAGE:
+    oct-cli check-reward [SUBCOMMAND]
+
+FLAGS:
+    -h, --help    Prints help information
+
+SUBCOMMANDS:
+    mainnet    
+    testnet 
+```
+### Example
+1. Check unprofitable validator of all appchain in mainnet:
+```shell
+oct-cli check-reward mainnet select-rpc block-pi input-registry-account octopus-registry.near
+```
+The result is like:
+
+![img.png](docs/check_unprofitable_validator_result.png)
