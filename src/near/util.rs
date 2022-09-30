@@ -1,6 +1,6 @@
+use crate::near::types::{NearAccountWithKey, NearBalance, NearEnv};
 use std::fs;
 use std::path::{Path, PathBuf};
-use crate::near::types::{NearEnv, NearAccountWithKey, NearBalance};
 
 pub fn get_default_near_account_dir_path(connection_config: &NearEnv) -> PathBuf {
     let mut home_dir = dirs::home_dir().expect("Impossible to get your home dir!");
@@ -8,21 +8,24 @@ pub fn get_default_near_account_dir_path(connection_config: &NearEnv) -> PathBuf
     home_dir
 }
 
-pub fn get_accounts_from_path(path: &Path)-> color_eyre::eyre::Result<Vec<NearAccountWithKey>> {
+pub fn get_accounts_from_path(path: &Path) -> color_eyre::eyre::Result<Vec<NearAccountWithKey>> {
     let mut accounts: Vec<NearAccountWithKey> = vec![];
-    for file in fs::read_dir(path).expect(format!("Failed to read dir use this path : {:?}\n", path).as_ref()) {
+    for file in fs::read_dir(path)
+        .expect(format!("Failed to read dir use this path : {:?}\n", path).as_ref())
+    {
         let entry = file.expect(format!("Failed to get file in path: {:?}.", path).as_ref());
-        let file_type = entry.file_type().expect(format!("Couldn't get file type for {:?}", entry).as_ref());
+        let file_type = entry
+            .file_type()
+            .expect(format!("Couldn't get file type for {:?}", entry).as_ref());
         if file_type.is_file() && entry.file_name().to_str().unwrap().ends_with(".json") {
-
-            let account = NearAccountWithKey::from_file(&entry.path()).expect(format!("Failed to get signer from file.\n").as_ref());
+            let account = NearAccountWithKey::from_file(&entry.path())
+                .expect(format!("Failed to get signer from file.\n").as_ref());
 
             accounts.push(account)
         }
     }
     Ok(accounts)
 }
-
 
 pub fn print_transaction_status(
     transaction_info: near_primitives::views::FinalExecutionOutcomeView,
@@ -359,8 +362,6 @@ pub fn print_action_error(action_error: near_primitives::errors::ActionError) {
         }
     }
 }
-
-
 
 #[test]
 fn test() -> color_eyre::eyre::Result<()> {

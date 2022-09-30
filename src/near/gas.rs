@@ -76,7 +76,7 @@ impl NearGas {
                 .map_err(|err| format!("Near Gas: {}", err))?
                 .checked_mul(10u64.pow(12))
                 .ok_or_else(|| "Near Gas: underflow or overflow happens")?),
-            _=> return Err("Near Gas: incorrect number entered".to_string()),
+            _ => return Err("Near Gas: incorrect number entered".to_string()),
         }
     }
 }

@@ -3,10 +3,10 @@ use std::ops::Mul;
 use std::time::Duration;
 
 use near_crypto::{InMemorySigner, PublicKey, Signer};
-use near_jsonrpc_client::{JsonRpcClient, MethodCallResult, methods};
 use near_jsonrpc_client::errors::JsonRpcError;
 use near_jsonrpc_client::methods::health::RpcStatusError;
 use near_jsonrpc_client::methods::query::RpcQueryRequest;
+use near_jsonrpc_client::{methods, JsonRpcClient, MethodCallResult};
 use near_jsonrpc_primitives::types::query::QueryResponseKind;
 use near_primitives::account::{AccessKey, AccessKeyPermission};
 use near_primitives::hash::CryptoHash;
@@ -19,8 +19,8 @@ use near_primitives::views::{
     AccessKeyView, AccountView, BlockView, ContractCodeView, FinalExecutionOutcomeView,
     QueryRequest, StatusResponse,
 };
+use tokio_retry::strategy::{jitter, ExponentialBackoff};
 use tokio_retry::Retry;
-use tokio_retry::strategy::{ExponentialBackoff, jitter};
 
 use crate::near::constants::ONE_TERA_GAS;
 use crate::near::rpc::result::ViewResultDetails;
@@ -273,21 +273,24 @@ impl Client {
         signer: &InMemorySigner,
         wasm: Vec<u8>,
         method_name: String,
-        args: Vec<u8>
+        args: Vec<u8>,
     ) -> anyhow::Result<FinalExecutionOutcomeView> {
         send_batch_tx_and_retry(
-            &self,signer,
+            &self,
+            signer,
             &signer.account_id,
             vec![
-                DeployContractAction{code: wasm}.into(),
-                FunctionCallAction{
+                DeployContractAction { code: wasm }.into(),
+                FunctionCallAction {
                     method_name,
                     args,
                     gas: ONE_TERA_GAS.mul(200),
-                    deposit: 0
-                }.into()
-            ]
-        ).await
+                    deposit: 0,
+                }
+                .into(),
+            ],
+        )
+        .await
     }
 
     // TODO: write tests that uses transfer_near
@@ -486,7 +489,7 @@ pub(crate) async fn send_batch_tx_and_retry(
             nonce + 1,
             signer.account_id.clone(),
             receiver_id.clone(),
-            signer as &dyn Signer ,
+            signer as &dyn Signer,
             actions.clone(),
             block_hash,
         ))

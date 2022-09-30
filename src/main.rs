@@ -1,18 +1,17 @@
 #![allow(dead_code)]
 #![allow(unused_variables)]
 
+use crate::common::{try_external_subcommand_execution, CliResult};
 use clap::Clap;
+use serde::{Deserialize, Serialize};
 use shell_words;
-use crate::common::{CliResult, try_external_subcommand_execution};
 use util::*;
-use serde::{Serialize, Deserialize};
 
 mod commands;
+mod common;
 mod near;
 mod oct;
 mod util;
-mod common;
-
 
 #[derive(Debug, Clone, interactive_clap_derive::InteractiveClap)]
 #[interactive_clap(context = ())]

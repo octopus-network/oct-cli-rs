@@ -1,12 +1,12 @@
-use dialoguer::{Select, theme::ColorfulTheme};
+use dialoguer::{theme::ColorfulTheme, Select};
 use strum::{EnumMessage, IntoEnumIterator};
 
 use crate::util::{is_executable, path_directories};
 
 pub fn prompt_variant<T>(prompt: &str) -> T
-    where
-        T: IntoEnumIterator + EnumMessage,
-        T: Copy + Clone,
+where
+    T: IntoEnumIterator + EnumMessage,
+    T: Copy + Clone,
 {
     let variants = T::iter().collect::<Vec<_>>();
     let actions = variants

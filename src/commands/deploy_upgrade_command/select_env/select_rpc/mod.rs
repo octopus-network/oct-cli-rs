@@ -22,21 +22,20 @@ impl SelectRpc {
             SelectRpc::Official(rpc) => {
                 rpc.process(
                     connection_config.clone(),
-                    Client::new(RpcProvider::NearOfficial.get_rpc_by_env(&connection_config))
-                ).await
+                    Client::new(RpcProvider::NearOfficial.get_rpc_by_env(&connection_config)),
+                )
+                .await
             }
             SelectRpc::BlockPi(rpc) => {
                 rpc.process(
                     connection_config.clone(),
-                    Client::new(RpcProvider::BlockPi.get_rpc_by_env(&connection_config))
-                ).await
+                    Client::new(RpcProvider::BlockPi.get_rpc_by_env(&connection_config)),
+                )
+                .await
             }
         }
-
     }
-
 }
-
 
 pub mod rpc {
     use crate::near::rpc::client::Client;
@@ -46,13 +45,14 @@ pub mod rpc {
     #[interactive_clap(context = ())]
     pub struct Rpc {
         #[interactive_clap(named_arg)]
-        pub select_accounts: super::select_accounts::SelectAccounts
+        pub select_accounts: super::select_accounts::SelectAccounts,
     }
 
     impl Rpc {
         pub async fn process(self, connection_config: NearEnv, client: Client) -> crate::CliResult {
-            self.select_accounts.process(connection_config, client).await
+            self.select_accounts
+                .process(connection_config, client)
+                .await
         }
     }
-
 }

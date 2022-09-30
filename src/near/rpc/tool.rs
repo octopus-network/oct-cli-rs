@@ -1,6 +1,5 @@
-
-use std::collections::HashMap;
 use near_primitives::views::StateItem;
+use std::collections::HashMap;
 
 /// Convert `StateItem`s over to a Map<data_key, value_bytes> representation.
 /// Assumes key and value are base64 encoded, so this also decodes them.

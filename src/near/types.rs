@@ -1,10 +1,14 @@
+use near_crypto::InMemorySigner;
 use std::io;
 use std::path::Path;
-use near_crypto::InMemorySigner;
 
 use serde::{Deserialize, Serialize};
 
-use crate::near::constants::{BLOCKPI_MAINNET_RPC_URL, BLOCKPI_TESTNET_RPC_URL, DIR_NAME_MAINNET, DIR_NAME_TESTNET, MAINNET_ARCHIVAL_API_SERVER_URL, MAINNET_TRANSACTION_URL, MAINNET_WALLET_URL, ONE_NEAR, TESTNET_ARCHIVAL_API_SERVER_URL, TESTNET_TRANSACTION_URL, TESTNET_WALLET_URL};
+use crate::near::constants::{
+    BLOCKPI_MAINNET_RPC_URL, BLOCKPI_TESTNET_RPC_URL, DIR_NAME_MAINNET, DIR_NAME_TESTNET,
+    MAINNET_ARCHIVAL_API_SERVER_URL, MAINNET_TRANSACTION_URL, MAINNET_WALLET_URL, ONE_NEAR,
+    TESTNET_ARCHIVAL_API_SERVER_URL, TESTNET_TRANSACTION_URL, TESTNET_WALLET_URL,
+};
 use crate::near::rpc::client::Client;
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -26,7 +30,7 @@ impl From<NearAccountWithKey> for InMemorySigner {
         InMemorySigner {
             account_id: account.account_id,
             public_key: account.public_key,
-            secret_key: account.private_key
+            secret_key: account.private_key,
         }
     }
 }
@@ -38,7 +42,6 @@ pub enum NearEnv {
 }
 
 impl NearEnv {
-
     pub fn rpc_url(&self) -> url::Url {
         match self {
             Self::Testnet => BLOCKPI_TESTNET_RPC_URL.parse().unwrap(),
@@ -46,18 +49,14 @@ impl NearEnv {
         }
     }
 
-    pub fn init_client(&self) -> Client  {
+    pub fn init_client(&self) -> Client {
         Client::new(self.rpc_url().as_str())
     }
 
     pub fn archival_rpc_url(&self) -> url::Url {
         match self {
-            Self::Testnet => TESTNET_ARCHIVAL_API_SERVER_URL
-                .parse()
-                .unwrap(),
-            Self::Mainnet => MAINNET_ARCHIVAL_API_SERVER_URL
-                .parse()
-                .unwrap(),
+            Self::Testnet => TESTNET_ARCHIVAL_API_SERVER_URL.parse().unwrap(),
+            Self::Mainnet => MAINNET_ARCHIVAL_API_SERVER_URL.parse().unwrap(),
         }
     }
 

@@ -1,16 +1,18 @@
-
 use near_crypto::InMemorySigner;
 use near_primitives::types::AccountId;
 use near_primitives::views::FinalExecutionOutcomeView;
 use serde_json::json;
 
 use crate::near::rpc::client::Client;
-use crate::oct::contracts::anchor::types::{AnchorStatus, AppchainState, AppchainValidator, ProtocolSettings, RewardHistory, ValidatorSetInfo};
+use crate::oct::contracts::anchor::types::{
+    AnchorStatus, AppchainState, AppchainValidator, ProtocolSettings, RewardHistory,
+    ValidatorSetInfo,
+};
 use crate::oct::contracts::NearContract;
 
 pub struct AnchorContract<'s> {
     pub account_id: AccountId,
-    pub client: &'s Client
+    pub client: &'s Client,
 }
 
 impl<'s> NearContract<'s> for AnchorContract<'s> {
@@ -24,21 +26,19 @@ impl<'s> NearContract<'s> for AnchorContract<'s> {
 }
 
 impl<'s> AnchorContract<'s> {
-    pub fn new(
-        account_id: AccountId,
-        client: &'s Client
-    ) -> Self {
-        return Self {
-            account_id,
-            client
-        }
+    pub fn new(account_id: AccountId, client: &'s Client) -> Self {
+        return Self { account_id, client };
     }
 
     pub async fn get_anchor_status(&self) -> anyhow::Result<AnchorStatus> {
-        self.client.view(
-            self.account_id.clone(),
-            "get_anchor_status".to_string(),
-            json!({}).to_string().into_bytes()).await.map(|e| e.json().unwrap())
+        self.client
+            .view(
+                self.account_id.clone(),
+                "get_anchor_status".to_string(),
+                json!({}).to_string().into_bytes(),
+            )
+            .await
+            .map(|e| e.json().unwrap())
     }
 
     pub async fn get_validator_rewards_of(
@@ -47,47 +47,79 @@ impl<'s> AnchorContract<'s> {
         end_era: u64,
         validator_id: AccountId,
     ) -> anyhow::Result<Vec<RewardHistory>> {
-        self.client.view(
-            self.account_id.clone(),
-            "get_validator_rewards_of".to_string(),
-            json!({
-                "start_era": start_era.to_string(),
-                "end_era": end_era.to_string(),
-                "validator_id": validator_id
-            }).to_string().into_bytes()).await.map(|e| e.json().unwrap())
+        self.client
+            .view(
+                self.account_id.clone(),
+                "get_validator_rewards_of".to_string(),
+                json!({
+                    "start_era": start_era.to_string(),
+                    "end_era": end_era.to_string(),
+                    "validator_id": validator_id
+                })
+                .to_string()
+                .into_bytes(),
+            )
+            .await
+            .map(|e| e.json().unwrap())
     }
 
-    pub async fn get_validator_list_of(&self, era_number: Option<u64>) -> anyhow::Result<Vec<AppchainValidator>> {
-        self.client.view(
-            self.account_id.clone(),
-            "get_validator_list_of".to_string(),
-            json!({
-                "era_number": era_number,
-            }).to_string().into_bytes()).await.map(|e| e.json().unwrap())
+    pub async fn get_validator_list_of(
+        &self,
+        era_number: Option<u64>,
+    ) -> anyhow::Result<Vec<AppchainValidator>> {
+        self.client
+            .view(
+                self.account_id.clone(),
+                "get_validator_list_of".to_string(),
+                json!({
+                    "era_number": era_number,
+                })
+                .to_string()
+                .into_bytes(),
+            )
+            .await
+            .map(|e| e.json().unwrap())
     }
 
     pub async fn get_protocol_settings(&self) -> anyhow::Result<ProtocolSettings> {
-        self.client.view(
-            self.account_id.clone(),
-            "get_protocol_settings".to_string(),
-            json!({}).to_string().into_bytes()).await.map(|e| e.json().unwrap())
+        self.client
+            .view(
+                self.account_id.clone(),
+                "get_protocol_settings".to_string(),
+                json!({}).to_string().into_bytes(),
+            )
+            .await
+            .map(|e| e.json().unwrap())
     }
 
-    pub async fn get_validator_set_info_of(&self, era_number: u64) -> anyhow::Result<Option<ValidatorSetInfo>> {
-        self.client.view(
-            self.account_id.clone(),
-            "get_validator_set_info_of".to_string(),
-            json!({
-                "era_number": era_number.to_string()
-            }).to_string().into_bytes()).await.map(|e| e.json().unwrap())
+    pub async fn get_validator_set_info_of(
+        &self,
+        era_number: u64,
+    ) -> anyhow::Result<Option<ValidatorSetInfo>> {
+        self.client
+            .view(
+                self.account_id.clone(),
+                "get_validator_set_info_of".to_string(),
+                json!({
+                    "era_number": era_number.to_string()
+                })
+                .to_string()
+                .into_bytes(),
+            )
+            .await
+            .map(|e| e.json().unwrap())
     }
 
     pub async fn get_appchain_state(&self) -> anyhow::Result<AppchainState> {
-        self.client.view(
-            self.account_id.clone(),
-            "get_appchain_state".to_string(),
-            json!({}).to_string().into_bytes()).await.map(|e| e.json().unwrap())    }
-
+        self.client
+            .view(
+                self.account_id.clone(),
+                "get_appchain_state".to_string(),
+                json!({}).to_string().into_bytes(),
+            )
+            .await
+            .map(|e| e.json().unwrap())
+    }
 }
 
 #[tokio::test]
@@ -96,7 +128,7 @@ pub async fn test_get_validator_set_info_of() -> anyhow::Result<()> {
 
     let anchor_contract = AnchorContract {
         account_id: "fusotao.octopus-registry.near".parse().unwrap(),
-        client: &client
+        client: &client,
     };
     let validator_set_info = anchor_contract.get_validator_set_info_of(51).await.unwrap();
 
@@ -110,7 +142,7 @@ pub async fn test_get_protocol_setting() -> anyhow::Result<()> {
 
     let anchor_contract = AnchorContract {
         account_id: "fusotao.octopus-registry.near".parse().unwrap(),
-        client: &client
+        client: &client,
     };
     let protocol_setting = anchor_contract.get_protocol_settings().await.unwrap();
 
@@ -147,7 +179,7 @@ pub async fn test_get_anchor_status() -> anyhow::Result<()> {
 
     let anchor_contract = AnchorContract {
         account_id: "fusotao.octopus-registry.near".parse().unwrap(),
-        client: &client
+        client: &client,
     };
     let status = anchor_contract.get_anchor_status().await.unwrap();
     dbg!(&status);
@@ -160,27 +192,35 @@ pub async fn test_get_validator_rewards_of() -> anyhow::Result<()> {
 
     let anchor_contract = AnchorContract {
         account_id: "fusotao.octopus-registry.near".parse().unwrap(),
-        client: &client
+        client: &client,
     };
-    let rewards = anchor_contract.get_validator_rewards_of(10, 50, "manhmai11.near".parse()?).await.unwrap();
+    let rewards = anchor_contract
+        .get_validator_rewards_of(10, 50, "manhmai11.near".parse()?)
+        .await
+        .unwrap();
     dbg!(rewards);
     Ok(())
 }
 
 #[tokio::test]
 pub async fn test_deploy() -> anyhow::Result<()> {
-
     use crate::near::util::print_transaction_status;
 
     let client = Client::new("https://public-rpc.blockpi.io/http/near-testnet");
 
-    let signer = crate::near::types::NearAccountWithKey::from_file(&std::path::Path::new("/Users/xushenbao/.near-credentials/testnet/anchorxsb.testnet.json")).unwrap();
+    let signer = crate::near::types::NearAccountWithKey::from_file(&std::path::Path::new(
+        "/Users/xushenbao/.near-credentials/testnet/anchorxsb.testnet.json",
+    ))
+    .unwrap();
 
-    let code = std::fs::read(&std::path::Path::new("/Users/xushenbao/project/blockchian/octopus/oct-cli-rs/res/appchain_anchor_v2.0.0.wasm")).unwrap();
+    let code = std::fs::read(&std::path::Path::new(
+        "/Users/xushenbao/project/blockchian/octopus/oct-cli-rs/res/appchain_anchor_v2.0.0.wasm",
+    ))
+    .unwrap();
 
     let anchor_contract = AnchorContract {
         account_id: "anchorxsb.testnet".parse().unwrap(),
-        client: &client
+        client: &client,
     };
     // let outcome = anchor_contract.deploy_and_init(
     //     &signer.into(),
@@ -196,12 +236,11 @@ pub async fn test_deploy() -> anyhow::Result<()> {
     // print_transaction_status(outcome, crate::near::types::NearEnv::Testnet);
 
     Ok(())
-
 }
 
 pub mod types {
-    use near_primitives::types::AccountId;
     use crate::*;
+    use near_primitives::types::AccountId;
 
     #[derive(Serialize, Deserialize, Clone, Debug)]
     pub struct AnchorStatus {
@@ -369,5 +408,4 @@ pub mod types {
         Broken,
         Dead,
     }
-
 }
