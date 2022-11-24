@@ -85,8 +85,8 @@ impl CallExecutionDetails {
     /// If we want to deserialize these bytes into a rust datatype, use [`CallExecutionDetails::json`]
     /// or [`CallExecutionDetails::borsh`] instead.
     pub fn raw_bytes(&self) -> anyhow::Result<Vec<u8>> {
-        let result: &str = match self.status {
-            FinalExecutionStatus::SuccessValue(ref val) => val,
+        let result = match &self.status {
+            FinalExecutionStatus::SuccessValue(val) => String::from_utf8(val.clone()).unwrap(),
             FinalExecutionStatus::Failure(ref err) => anyhow::bail!(err.clone()),
             FinalExecutionStatus::NotStarted => anyhow::bail!("Transaction not started."),
             FinalExecutionStatus::Started => anyhow::bail!("Transaction still being processed."),
@@ -274,7 +274,9 @@ impl ExecutionOutcome {
     /// to an [`anyhow::Error`] object which can be downcasted later.
     pub fn into_result(self) -> anyhow::Result<ValueOrReceiptId> {
         match self.status {
-            ExecutionStatusView::SuccessValue(value) => Ok(ValueOrReceiptId::Value(value)),
+            ExecutionStatusView::SuccessValue(value) => {
+                Ok(ValueOrReceiptId::Value(String::from_utf8(value).unwrap()))
+            }
             ExecutionStatusView::SuccessReceiptId(hash) => {
                 Ok(ValueOrReceiptId::ReceiptId(CryptoHash(hash.0)))
             }
