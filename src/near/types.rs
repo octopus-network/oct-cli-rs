@@ -1,4 +1,5 @@
 use near_crypto::InMemorySigner;
+use near_primitives::types::AccountId;
 use std::io;
 use std::path::Path;
 
@@ -13,7 +14,7 @@ use crate::near::rpc::client::Client;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct NearAccountWithKey {
-    pub account_id: near_primitives::types::AccountId,
+    pub account_id: AccountId,
     pub public_key: near_crypto::PublicKey,
     pub private_key: near_crypto::SecretKey,
 }

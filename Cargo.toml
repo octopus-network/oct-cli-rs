@@ -46,6 +46,7 @@ color-eyre = "0.5"
 
 near-crypto = "0.15"
 near-primitives = "0.15"
+near-sdk = "4.0.0"
 near-jsonrpc-client = "0.4.1"
 near-jsonrpc-primitives = "0.15"
 
@@ -53,3 +54,6 @@ interactive_clap = { git = "https://github.com/FroVolod/interactive-clap", rev =
 interactive_clap_derive = { git = "https://github.com/FroVolod/interactive-clap", rev = "23481402d7f36d9e7b0f5460f6d249bcf4c31ec5" }
 
 prettytable-rs = "^0.9"
+
+appchain-registry = { git = "https://github.com/octopus-network/octopus-appchain-registry", branch = "main" }
+appchain-anchor = { git = "https://github.com/octopus-network/octopus-appchain-anchor", branch = "v2.4.0" }

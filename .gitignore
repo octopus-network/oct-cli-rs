@@ -7,5 +7,6 @@ target/
 .DS_Store
 *.iml
 .vscode
+.VSCodeCounter
 /node_modules/
 /tmp/
