@@ -4,6 +4,7 @@ pub mod check_unprofitable_validator;
 pub mod clean_state_command;
 pub mod delegation_airdrop;
 pub mod deploy_upgrade_command;
+pub mod reset_anchor;
 
 #[derive(Debug, Clone, EnumDiscriminants, interactive_clap_derive::InteractiveClap)]
 #[strum_discriminants(derive(EnumMessage, EnumIter))]
@@ -18,6 +19,8 @@ pub enum TopLevelCommand {
     CheckUnprofitableValidator(self::check_unprofitable_validator::CheckUnprofitableValidator),
     #[strum_discriminants(strum(message = "Perform delegation airdrop"))]
     DelegationAirdrop(self::delegation_airdrop::DelegationAirdrop),
+    #[strum_discriminants(strum(message = "Reset a certain anchor contract"))]
+    ResetAnchor(self::reset_anchor::ResetAnchor),
 }
 
 impl TopLevelCommand {
@@ -32,6 +35,9 @@ impl TopLevelCommand {
             }
             TopLevelCommand::DelegationAirdrop(delegation_airdrip) => {
                 delegation_airdrip.process().await
+            }
+            TopLevelCommand::ResetAnchor(reset_anchor) => {
+                reset_anchor.process().await
             }
         }
     }

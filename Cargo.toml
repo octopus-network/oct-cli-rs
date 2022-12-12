@@ -1,6 +1,6 @@
 [package]
 name = "oct-cli"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["xsb.near <bob@oct.network>"]
 edition = "2021"
 
