@@ -120,14 +120,26 @@ impl ResetAnchor {
             }
         }
         //
-        call_contract_function_and_parse_result::<MultiTxsOperationProcessingResult>(
-            &anchor.client,
-            &anchor.account_id,
-            anchor_signer.as_ref().unwrap(),
-            "clear_unbonded_stakes".to_string(),
-            json!({}).to_string(),
-        )
-        .await?;
+        loop {
+            match call_contract_function_and_parse_result::<MultiTxsOperationProcessingResult>(
+                &anchor.client,
+                &anchor.account_id,
+                anchor_signer.as_ref().unwrap(),
+                "clear_validator_set_histories".to_string(),
+                json!({}).to_string(),
+            )
+            .await?
+            .unwrap()
+            {
+                MultiTxsOperationProcessingResult::NeedMoreGas => continue,
+                MultiTxsOperationProcessingResult::Ok => break,
+                MultiTxsOperationProcessingResult::Error(_) => {
+                    return Err(color_eyre::Report::msg(format!(
+                        "Failed to clear validator set histories. Processing Stopped.",
+                    )))
+                }
+            }
+        }
         //
         loop {
             match call_contract_function_and_parse_result::<MultiTxsOperationProcessingResult>(
@@ -176,7 +188,7 @@ impl ResetAnchor {
                 &anchor.client,
                 &anchor.account_id,
                 anchor_signer.as_ref().unwrap(),
-                "clear_staking_histories".to_string(),
+                "clear_unbonded_stakes_and_staking_histories".to_string(),
                 json!({}).to_string(),
             )
             .await?
@@ -186,7 +198,7 @@ impl ResetAnchor {
                 MultiTxsOperationProcessingResult::Ok => break,
                 MultiTxsOperationProcessingResult::Error(_) => {
                     return Err(color_eyre::Report::msg(format!(
-                        "Failed to clear staking histories. Processing Stopped.",
+                        "Failed to clear unbonded stakes and staking histories. Processing Stopped.",
                     )))
                 }
             }
@@ -293,27 +305,6 @@ impl ResetAnchor {
             json!({}).to_string(),
         )
         .await?;
-        //
-        loop {
-            match call_contract_function_and_parse_result::<MultiTxsOperationProcessingResult>(
-                &anchor.client,
-                &anchor.account_id,
-                anchor_signer.as_ref().unwrap(),
-                "clear_validator_set_histories".to_string(),
-                json!({}).to_string(),
-            )
-            .await?
-            .unwrap()
-            {
-                MultiTxsOperationProcessingResult::NeedMoreGas => continue,
-                MultiTxsOperationProcessingResult::Ok => break,
-                MultiTxsOperationProcessingResult::Error(_) => {
-                    return Err(color_eyre::Report::msg(format!(
-                        "Failed to clear validator set histories. Processing Stopped.",
-                    )))
-                }
-            }
-        }
         //
         call_contract_function_and_parse_result::<MultiTxsOperationProcessingResult>(
             &anchor.client,
