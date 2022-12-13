@@ -189,6 +189,7 @@ impl Client {
                 request: QueryRequest::ViewState {
                     account_id: contract_id,
                     prefix: StoreKey::from(prefix.map(Vec::from).unwrap_or_default()),
+                    include_proof: false,
                 },
             })
             .await?;

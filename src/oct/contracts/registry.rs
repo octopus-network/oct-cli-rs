@@ -1,7 +1,7 @@
 use crate::near::rpc::client::Client;
-use crate::oct::contracts::registry::types::AppchainStatus;
-use crate::oct::contracts::NearContract;
+use appchain_registry::types::AppchainStatus;
 use near_primitives::types::AccountId;
+use crate::oct::contracts::NearContract;
 use serde_json::json;
 
 pub struct RegistryContract<'s> {
@@ -49,16 +49,5 @@ impl<'s> RegistryContract<'s> {
             )
             .await
             .map(|e| e.json().unwrap())
-    }
-}
-
-pub mod types {
-    use crate::oct::contracts::anchor::types::AppchainState;
-    use crate::*;
-    use near_primitives::types::AccountId;
-
-    #[derive(Clone, Serialize, Deserialize)]
-    pub struct AppchainStatus {
-        pub appchain_state: AppchainState,
     }
 }

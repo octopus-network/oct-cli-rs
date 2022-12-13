@@ -1,14 +1,14 @@
 use crate::near::rpc::client::Client;
 use crate::near::types::NearEnv;
-use crate::oct::contracts::anchor::types::{AnchorStatus, AppchainState};
 use crate::oct::contracts::anchor::AnchorContract;
 use crate::oct::contracts::registry::RegistryContract;
 use crate::CliResult;
+use appchain_registry::types::AppchainState;
 use color_eyre::owo_colors::OwoColorize;
 use dialoguer::Input;
 use itertools::Itertools;
 use near_primitives::types::AccountId;
-use prettytable::{ptable, row, table, Cell, Row, Table};
+use prettytable::{row, table, Cell, Row, Table};
 use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone, interactive_clap_derive::InteractiveClap)]
@@ -80,16 +80,16 @@ impl InputRegistryAccount {
             })?;
 
             let start_check_era =
-                if (setting.maximum_allowed_unprofitable_era_count as u64) > era_now {
+                if (setting.maximum_allowed_unprofitable_era_count as u64) > era_now.0 {
                     0
                 } else {
-                    era_now - (setting.maximum_allowed_unprofitable_era_count as u64)
+                    era_now.0 - (setting.maximum_allowed_unprofitable_era_count as u64)
                 };
 
             let mut era_with_unprofitable_validator_ids = HashMap::new();
             let mut unprofitable_account_ids = HashSet::new();
 
-            for era in start_check_era..(era_now + 1) {
+            for era in start_check_era..(era_now.0 + 1) {
                 let info = anchor
                     .get_validator_set_info_of(era)
                     .await
@@ -104,10 +104,16 @@ impl InputRegistryAccount {
                     );
 
                 info.unprofitable_validator_ids.iter().for_each(|e| {
-                    unprofitable_account_ids.insert(e.clone());
+                    unprofitable_account_ids.insert(AccountId::try_from(e.to_string()).unwrap());
                 });
 
-                era_with_unprofitable_validator_ids.insert(era, info.unprofitable_validator_ids);
+                era_with_unprofitable_validator_ids.insert(
+                    era,
+                    info.unprofitable_validator_ids
+                        .iter()
+                        .map(|id| AccountId::try_from(id.to_string()).unwrap())
+                        .collect(),
+                );
             }
             print_auto_unbound_info_table(
                 anchor_contract_id,
@@ -201,5 +207,5 @@ fn test() {
 
     let state = AppchainState::Active;
     println!("{}", matches!(state, AppchainState::Active));
-    println!("{}", matches!(state, AppchainState::Frozen));
+    println!("{}", matches!(state, AppchainState::Broken));
 }
