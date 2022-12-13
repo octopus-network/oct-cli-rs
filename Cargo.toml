@@ -56,4 +56,4 @@ interactive_clap_derive = { git = "https://github.com/FroVolod/interactive-clap"
 prettytable-rs = "^0.9"
 
 appchain-registry = { git = "https://github.com/octopus-network/octopus-appchain-registry", branch = "main" }
-appchain-anchor = { git = "https://github.com/octopus-network/octopus-appchain-anchor", branch = "v2.4.0" }
+appchain-anchor = { git = "https://github.com/octopus-network/octopus-appchain-anchor", tag = "v2.4.0" }
